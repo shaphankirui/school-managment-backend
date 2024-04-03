@@ -1,183 +1,138 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  // provider = "postgresql"
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+model Student {
+  id              Int              @id @default(autoincrement())
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  firstName       String
+  lastName        String
+  otherName       String?
+  gender          String
+  enrolledCourses StudentCourse[]
+  feePayments     FeePayment[]
+  parents         Parent[]
+  classId    Int
+  class      Class     @relation(fields: [classId], references: [id])
 
-  email     String  @unique
-  password  String
-  firstName String
-  lastName  String?
-  Blog      Blog[]
-  Order     Order[]
-  News      News[]
-  Tenders      Tenders[]
-  Careers      Careers[]
-  House      House[]
-
-  @@map("users")
+  @@map("students")
 }
 
-model Blog {
-  id        Int      @id @default(autoincrement())
-  title     String
-  body      String
-  pictureUrl String?
-  // postedBy String?
-  slug String?
-  createdAt DateTime @default(now())
-  userId    Int
-  user      User     @relation(fields: [userId], references: [id])
+model Parent {
+  id         Int       @id @default(autoincrement())
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  firstName  String
+  lastName   String
+  otherName  String?
+  gender     String
+  email      String    @unique
+  password   String
+  students   Student[]
 
-  @@map("blogs")
+  @@map("parents")
 }
 
-model Product {
-  id           Int      @id @default(autoincrement())
-  name         String
-  description  String?
-  pictureUrl   String?
-  model  String
-  SAP   String?
-  availability Boolean? @default(true)
-  quantity     Int?
-  countable    Boolean? @default(true)
-  price        Float?
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-  categoryId     Int
+model Teacher {
+  id         Int            @id @default(autoincrement())
+  createdAt  DateTime       @default(now())
+  updatedAt  DateTime       @updatedAt
+  email      String         @unique
+  password   String
+  firstName  String
+  lastName   String
+  otherName  String?
+  gender     String
+  courses    TeacherCourse[]
 
-category  Category @relation(fields: [categoryId], references: [id])
-
-  @@map("products")
+  @@map("teachers")
 }
 
-model Category {
-  id          Int      @id @default(autoincrement())
-  name        String
-  description String
-  pictureUrl  String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  Product     Product[]
+model Class {
+  id             Int            @id @default(autoincrement())
+  name           String
+  classTeacher   String
+  classPrefect   String
+  pictureUrl     String?
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  students       Student[]
+  academicTerm   AcademicTerm?  @relation(fields: [academicTermId], references: [id])
+  academicTermId Int?
+  courseClasses  CourseClass[]
 
-
-  @@map("categories")
+  @@map("classes")
 }
 
-model Order {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+model Course {
+  id            Int             @id @default(autoincrement())
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  name          String
+  students      StudentCourse[]
+  teachers      TeacherCourse[]
+  classes       CourseClass[]
 
-  items     Json     // Store order items as JSON
-  total     Float
-  status    String
-  payment   Float
-  customer  String
-  location  String
-  userId    Int
-  user      User     @relation(fields: [userId], references: [id])
-  @@map("orders")
-  }
-
-  
-model News {
-   id        Int      @id @default(autoincrement())
-  title     String
-  body      String
-  pictureUrl String?
-  slug String?
-  createdAt DateTime @default(now())
-  userId    Int
-  user      User     @relation(fields: [userId], references: [id])
-  @@map("news")
+  @@map("courses")
 }
 
-model Team {
-  id          Int      @id @default(autoincrement())
-  fullName        String
-  position        String
-  email String
-  phone String
-  is_active Boolean
-  pictureUrl  String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+model StudentCourse {
+  student   Student @relation(fields: [studentId], references: [id])
+  studentId Int
+  course    Course  @relation(fields: [courseId], references: [id])
+  courseId  Int
 
-
-  @@map("team")
-}
-model Tenders {
-  id          Int      @id @default(autoincrement())
-  title        String
-  slug String?
-  description String
-  aplicationDateLine String
-  is_open Boolean
-  fileUrl  String?
-  pictureUrl  String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  userId    Int
-  user      User     @relation(fields: [userId], references: [id])
-
-
-  @@map("tenders")
-}
-model Careers {
-  id          Int      @id @default(autoincrement())
-  title        String
-  slug String?
-  description String
-  requirements String
-  aplicationDateLine String
-  is_open Boolean
-  fileUrl  String?
-  pictureUrl  String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  userId    Int
-  user      User     @relation(fields: [userId], references: [id])
-
-
-  @@map("careers")
+  @@id([studentId, courseId])
+  @@map("student_courses")
 }
 
-model House {
-  id          Int      @id @default(autoincrement())
-  title        String
-  slug String?
-  description String
-  price String
-  is_open Boolean
-  fileUrl  String?
-  pictureUrl  String[]  // Change to an array of strings
-  country  String?
-  county  String?
-  mapAdress  String?
-  latitude  String?
-  longitude  String?
-  interiorDetails  String[]  // Change to an array of strings
-  outdoorDetails  String[]  // Change to an array of strings
-  Utilities  String[]  // Change to an array of strings
-  otherFeatures  String[]  // Change to an array of strings
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  userId    Int
-  user      User     @relation(fields: [userId], references: [id])
+model TeacherCourse {
+  teacher   Teacher @relation(fields: [teacherId], references: [id])
+  teacherId Int
+  course    Course  @relation(fields: [courseId], references: [id])
+  courseId  Int
 
-  @@map("houses")
+  @@id([teacherId, courseId])
+  @@map("teacher_courses")
+}
+
+model CourseClass {
+  course   Course @relation(fields: [courseId], references: [id])
+  courseId Int
+  class    Class  @relation(fields: [classId], references: [id])
+  classId  Int
+
+  @@id([courseId, classId])
+  @@map("course_classes")
+}
+
+model AcademicTerm {
+  id        Int       @id @default(autoincrement())
+  name      String
+  startDate DateTime
+  endDate   DateTime
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  classes   Class[]
+
+  @@map("academic_terms")
+}
+
+model FeePayment {
+  id              Int      @id @default(autoincrement())
+  amount          Float
+  paymentMode     String
+  confirmationCode String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  studentId       Int
+  student         Student  @relation(fields: [studentId], references: [id])
+
+  @@map("fee_payments")
 }
