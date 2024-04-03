@@ -17,9 +17,10 @@ model Student {
   gender          String
   enrolledCourses StudentCourse[]
   feePayments     FeePayment[]
-  parents         Parent[]
   classId    Int
   class      Class     @relation(fields: [classId], references: [id])
+  parentId    Int
+  parent      Parent     @relation(fields: [parentId], references: [id])
 
   @@map("students")
 }
@@ -83,6 +84,7 @@ model Course {
 }
 
 model StudentCourse {
+
   student   Student @relation(fields: [studentId], references: [id])
   studentId Int
   course    Course  @relation(fields: [courseId], references: [id])

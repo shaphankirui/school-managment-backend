@@ -7,6 +7,10 @@ import { PrismaModule } from './prisma/prisma.module';
 import { StudentModule } from './student/student.module';
 import { ClassModule } from './class/class.module';
 import { CoursesModule } from './courses/courses.module';
+import { TeachersModule } from './teachers/teachers.module';
+import { TeachersCoursesModule } from './teachers-courses/teachers-courses.module';
+import { ParentModule } from './parent/parent.module';
+import { ParentToStudentModule } from './parent-to-student/parent-to-student.module';
 
 @Module({
   imports: [
@@ -21,6 +25,14 @@ import { CoursesModule } from './courses/courses.module';
     ClassModule,
 
     CoursesModule,
+
+    TeachersModule,
+
+    TeachersCoursesModule,
+
+    ParentModule,
+
+    ParentToStudentModule,
   ],
   controllers: [],
   providers: [],

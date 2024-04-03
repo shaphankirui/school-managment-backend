@@ -21,4 +21,6 @@ export class StudentDto {
 
   @IsNotEmpty()
   classId: number;
+  @IsNotEmpty()
+  parentId: number;
 }

@@ -14,6 +14,7 @@ export class StudentService {
           otherName: dto.otherName,
           gender: dto.gender,
           classId: dto.classId,
+          parentId: dto.classId,
         },
       });
   

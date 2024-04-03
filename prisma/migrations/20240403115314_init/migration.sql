@@ -8,6 +8,7 @@ CREATE TABLE "students" (
     "otherName" TEXT,
     "gender" TEXT NOT NULL,
     "classId" INTEGER NOT NULL,
+    "parentId" INTEGER NOT NULL,
 
     CONSTRAINT "students_pkey" PRIMARY KEY ("id")
 );
@@ -115,26 +116,17 @@ CREATE TABLE "fee_payments" (
     CONSTRAINT "fee_payments_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
-CREATE TABLE "_ParentToStudent" (
-    "A" INTEGER NOT NULL,
-    "B" INTEGER NOT NULL
-);
-
 -- CreateIndex
 CREATE UNIQUE INDEX "parents_email_key" ON "parents"("email");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "teachers_email_key" ON "teachers"("email");
 
--- CreateIndex
-CREATE UNIQUE INDEX "_ParentToStudent_AB_unique" ON "_ParentToStudent"("A", "B");
-
--- CreateIndex
-CREATE INDEX "_ParentToStudent_B_index" ON "_ParentToStudent"("B");
-
 -- AddForeignKey
 ALTER TABLE "students" ADD CONSTRAINT "students_classId_fkey" FOREIGN KEY ("classId") REFERENCES "classes"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "students" ADD CONSTRAINT "students_parentId_fkey" FOREIGN KEY ("parentId") REFERENCES "parents"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "classes" ADD CONSTRAINT "classes_academicTermId_fkey" FOREIGN KEY ("academicTermId") REFERENCES "academic_terms"("id") ON DELETE SET NULL ON UPDATE CASCADE;
@@ -159,9 +151,3 @@ ALTER TABLE "course_classes" ADD CONSTRAINT "course_classes_classId_fkey" FOREIG
 
 -- AddForeignKey
 ALTER TABLE "fee_payments" ADD CONSTRAINT "fee_payments_studentId_fkey" FOREIGN KEY ("studentId") REFERENCES "students"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "_ParentToStudent" ADD CONSTRAINT "_ParentToStudent_A_fkey" FOREIGN KEY ("A") REFERENCES "parents"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "_ParentToStudent" ADD CONSTRAINT "_ParentToStudent_B_fkey" FOREIGN KEY ("B") REFERENCES "students"("id") ON DELETE CASCADE ON UPDATE CASCADE;
