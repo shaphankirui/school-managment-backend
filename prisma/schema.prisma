@@ -138,3 +138,15 @@ model FeePayment {
 
   @@map("fee_payments")
 }
+
+model Management {
+  id         Int       @id @default(autoincrement())
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  firstName  String
+  lastName   String
+  otherName  String?
+  email      String    @unique
+  password   String
+  role       String   
+}

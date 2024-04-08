@@ -27,7 +27,7 @@ export class StudentController {
     @Put(':id')
     async updateStudent(@Param('id') id: string, @Body() dto: StudentDto) {
       const numericId = parseInt(id, 10);
-      return this.studentService.updateStudent(numericId, dto);
+      return this.studentService.updateStudent(id, dto);
     }
   
     @Delete(':id')

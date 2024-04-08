@@ -11,6 +11,9 @@ import { TeachersModule } from './teachers/teachers.module';
 import { TeachersCoursesModule } from './teachers-courses/teachers-courses.module';
 import { ParentModule } from './parent/parent.module';
 import { ParentToStudentModule } from './parent-to-student/parent-to-student.module';
+import { AcademicTermModule } from './academic-term/academic-term.module';
+import { FeePaymentModule } from './fee-payment/fee-payment.module';
+import { ManagmentModule } from './managment/managment.module';
 
 @Module({
   imports: [
@@ -33,6 +36,12 @@ import { ParentToStudentModule } from './parent-to-student/parent-to-student.mod
     ParentModule,
 
     ParentToStudentModule,
+
+    AcademicTermModule,
+
+    FeePaymentModule,
+
+    ManagmentModule,
   ],
   controllers: [],
   providers: [],

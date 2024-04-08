@@ -38,20 +38,22 @@ export class StudentService {
       return student;
     }
   
-    async updateStudent(id: number, dto: StudentDto) {
+    async updateStudent(id: string, dto: StudentDto) {
+      const numericId = parseInt(id, 10);
       const existingStudent = await this.prisma.student.findUnique({
-        where: { id },
+        where: { id: numericId },
       });
-  
+    
       if (!existingStudent) {
-        throw new NotFoundException(`Student with ID ${id} not found`);
+        throw new NotFoundException(`Student with ID ${numericId} not found`);
       }
-  
+    
       return this.prisma.student.update({
-        where: { id },
+        where: { id: numericId },
         data: dto,
       });
     }
+    
   
     async deleteStudent(id: number) {
       const existingStudent = await this.prisma.student.findUnique({
