@@ -1,9 +1,11 @@
 import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
 import { TeacherDto } from './teacher.dto';
 import { TeachersService } from './teachers.service';
+import { TeacherLoginDto } from './teacherLogin.dto';
 
 @Controller('teachers')
 export class TeachersController {
+   
     constructor(private readonly teacherService: TeachersService) {}
 
     @Post()
@@ -32,5 +34,9 @@ export class TeachersController {
     async deleteTeacher(@Param('id') id: string) {
       const numericId = parseInt(id, 10);
       return this.teacherService.deleteTeacher(numericId);
+    }
+    @Post('signin')
+    async signIn(@Body() dto:TeacherLoginDto ) {
+      return this.teacherService.signIn(dto);
     }
 }
