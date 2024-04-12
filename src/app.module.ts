@@ -14,6 +14,7 @@ import { ParentToStudentModule } from './parent-to-student/parent-to-student.mod
 import { AcademicTermModule } from './academic-term/academic-term.module';
 import { FeePaymentModule } from './fee-payment/fee-payment.module';
 import { ManagmentModule } from './managment/managment.module';
+import { ExamModule } from './exam/exam.module';
 
 @Module({
   imports: [
@@ -42,6 +43,8 @@ import { ManagmentModule } from './managment/managment.module';
     FeePaymentModule,
 
     ManagmentModule,
+
+    ExamModule,
   ],
   controllers: [],
   providers: [],

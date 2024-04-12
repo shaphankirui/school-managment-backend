@@ -51,6 +51,8 @@ model Teacher {
   otherName  String?
   gender     String
   courses    TeacherCourse[]
+  exam       Exam[]
+
 
   @@map("teachers")
 }
@@ -67,6 +69,8 @@ model Class {
   academicTerm   AcademicTerm?  @relation(fields: [academicTermId], references: [id])
   academicTermId Int?
   courseClasses  CourseClass[]
+  exam       Exam[]
+
 
   @@map("classes")
 }
@@ -79,6 +83,7 @@ model Course {
   students      StudentCourse[]
   teachers      TeacherCourse[]
   classes       CourseClass[]
+  exam       Exam[]
 
   @@map("courses")
 }
@@ -122,6 +127,8 @@ model AcademicTerm {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   classes   Class[]
+  exam       Exam[]
+
 
   @@map("academic_terms")
 }
@@ -150,3 +157,25 @@ model Management {
   password   String
   role       String   
 }
+
+model Exam {
+  id        Int      @id @default(autoincrement())
+  name      String
+  date      DateTime
+  courseId  Int
+  teacherId Int
+  classId   Int
+  accademicTermId   Int
+  outOf     Int
+  passMark  Int?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  course    Course   @relation(fields: [courseId], references: [id])
+  teacher   Teacher  @relation(fields: [teacherId], references: [id])
+  class     Class    @relation(fields: [classId], references: [id])
+  term     AcademicTerm    @relation(fields: [accademicTermId], references: [id])
+
+  @@map("exams")
+}
+
