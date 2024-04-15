@@ -14,12 +14,13 @@ export class StudentService {
           otherName: dto.otherName,
           gender: dto.gender,
           classId: dto.classId,
-          parentId: dto.classId,
+          parentId: dto.parentId, // Corrected field
         },
       });
-  
+    
       return student;
     }
+    
   
     async getAllStudents() {
       return this.prisma.student.findMany();

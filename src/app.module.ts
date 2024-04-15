@@ -15,6 +15,7 @@ import { AcademicTermModule } from './academic-term/academic-term.module';
 import { FeePaymentModule } from './fee-payment/fee-payment.module';
 import { ManagmentModule } from './managment/managment.module';
 import { ExamModule } from './exam/exam.module';
+import { ResultsModule } from './results/results.module';
 
 @Module({
   imports: [
@@ -45,6 +46,8 @@ import { ExamModule } from './exam/exam.module';
     ManagmentModule,
 
     ExamModule,
+
+    ResultsModule,
   ],
   controllers: [],
   providers: [],

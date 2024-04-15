@@ -1,4 +1,3 @@
-// exam.controller.ts
 import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
 import { ExamService } from './exam.service';
 import { ExamDto } from './exam.dto';
@@ -33,5 +32,11 @@ export class ExamController {
   async deleteExam(@Param('id') id: string) {
     const numericId = parseInt(id, 10);
     return this.examService.deleteExam(numericId);
+  }
+
+  @Get(':id/students')
+  async getStudentsTakingExam(@Param('id') id: string) {
+    const numericId = parseInt(id, 10);
+    return this.examService.getStudentsTakingExam(numericId);
   }
 }

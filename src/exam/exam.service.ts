@@ -1,4 +1,3 @@
-// exam.service.ts
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { ExamDto } from './exam.dto';
@@ -23,7 +22,6 @@ export class ExamService {
       },
     });
   }
-  
 
   async getAllExams() {
     return this.prisma.exam.findMany();
@@ -42,9 +40,9 @@ export class ExamService {
     if (!existingExam) {
       throw new NotFoundException(`Exam with ID ${id} not found`);
     }
-  
+
     const parsedDate = new Date(dto.date);
-  
+
     return this.prisma.exam.update({
       where: { id },
       data: {
@@ -66,5 +64,14 @@ export class ExamService {
       throw new NotFoundException(`Exam with ID ${id} not found`);
     }
     return this.prisma.exam.delete({ where: { id } });
+  }
+
+  async getStudentsTakingExam(examId: number) {
+    const exam = await this.getExamById(examId);
+    const classStudents = await this.prisma.class.findUnique({
+      where: { id: exam.classId },
+      include: { students: true },
+    });
+    return classStudents.students;
   }
 }
