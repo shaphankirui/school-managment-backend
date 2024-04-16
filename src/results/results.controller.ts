@@ -35,4 +35,15 @@ export class ResultsController {
   async deleteResult(@Param('id', ParseIntPipe) id: number) {
     return this.resultsService.deleteResult(id);
   }
+
+  @Get('exam/:examId')
+  async getResultsByExam(@Param('examId', ParseIntPipe) examId: number) {
+    return this.resultsService.getResultsByExam(examId);
+  }
+
+  @Get('student/:studentId')
+  async getAllResultsForStudent(@Param('studentId', ParseIntPipe) studentId: number) {
+    return this.resultsService.getAllResultsForStudent(studentId);
+  }
 }
+

@@ -19,8 +19,6 @@ export class ResultsService {
     });
   }
   
-  
-
   async getAllResults() {
     return this.prisma.score.findMany();
   }
@@ -49,4 +47,21 @@ export class ResultsService {
     const existingResult = await this.getResultById(id);
     return this.prisma.score.delete({ where: { id } });
   }
+
+  async getResultsByExam(examId: number) {
+    return this.prisma.score.findMany({
+      where: {
+        examId,
+      },
+    });
+  }
+
+  async getAllResultsForStudent(studentId: number) {
+    return this.prisma.score.findMany({
+      where: {
+        studentId,
+      },
+    });
+  }
 }
+
