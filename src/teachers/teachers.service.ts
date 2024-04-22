@@ -124,25 +124,21 @@ export class TeachersService {
     console.log('Received Token', token);
     // Decode token to extract payload
     const decodedToken: any = this.jwt.decode(token);
-
     // Log the decoded token
     console.log('Decoded Token', decodedToken);
-
     // Extract teacher ID from decoded token and convert it to a number
     const teacherId = parseInt(decodedToken.sub, 10);
-
     // Log the extracted teacher ID
     console.log('Teacher ID', teacherId);
-
     // Fetch teacher details using the extracted ID
     const teacher = await this.prisma.teacher.findUnique({
-      where: { id: teacherId },
+      where: {
+        id: teacherId,
+      },
     });
-
     if (!teacher) {
       throw new NotFoundException(`Teacher with ID ${teacherId} not found`);
     }
-
     return teacher;
   }
 }

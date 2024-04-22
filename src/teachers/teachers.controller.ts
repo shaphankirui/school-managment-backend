@@ -50,14 +50,8 @@ export class TeachersController {
     return this.teacherService.signIn(dto);
   }
 
-  @Get('profile')
-  async getTeacherProfile(@Query('token') token: string) {
-    console.log(' token goten', token);
-    if (!token) {
-      throw new UnauthorizedException(
-        'Token is missing in the query parameters',
-      );
-    }
+  @Get('profile/:token')
+  async getTeacherProfile(@Param('token') token: string) {
     return this.teacherService.getTeacherByToken(token);
   }
 }
