@@ -1,11 +1,14 @@
 -- CreateTable
 CREATE TABLE "students" (
     "id" SERIAL NOT NULL,
+    "admisionNumber" SERIAL NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "firstName" TEXT NOT NULL,
     "lastName" TEXT NOT NULL,
     "otherName" TEXT,
+    "feeBalance" DOUBLE PRECISION,
+    "emergencyContactNumber" TEXT NOT NULL,
     "gender" TEXT NOT NULL,
     "classId" INTEGER NOT NULL,
     "parentId" INTEGER NOT NULL,
@@ -38,6 +41,14 @@ CREATE TABLE "teachers" (
     "firstName" TEXT NOT NULL,
     "lastName" TEXT NOT NULL,
     "otherName" TEXT,
+    "phone" TEXT,
+    "bankName" TEXT,
+    "accountNumber" TEXT,
+    "is_bom" BOOLEAN NOT NULL,
+    "salaryAmount" DOUBLE PRECISION,
+    "salaryBalance" DOUBLE PRECISION,
+    "RemidialBalance" DOUBLE PRECISION,
+    "TotalBance" DOUBLE PRECISION,
     "gender" TEXT NOT NULL,
 
     CONSTRAINT "teachers_pkey" PRIMARY KEY ("id")
@@ -97,6 +108,7 @@ CREATE TABLE "academic_terms" (
     "name" TEXT NOT NULL,
     "startDate" TIMESTAMP(3) NOT NULL,
     "endDate" TIMESTAMP(3) NOT NULL,
+    "feeAmount" DOUBLE PRECISION NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -116,11 +128,58 @@ CREATE TABLE "fee_payments" (
     CONSTRAINT "fee_payments_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "Management" (
+    "id" SERIAL NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "firstName" TEXT NOT NULL,
+    "lastName" TEXT NOT NULL,
+    "otherName" TEXT,
+    "email" TEXT NOT NULL,
+    "password" TEXT NOT NULL,
+    "role" TEXT NOT NULL,
+
+    CONSTRAINT "Management_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "exams" (
+    "id" SERIAL NOT NULL,
+    "name" TEXT NOT NULL,
+    "date" TIMESTAMP(3) NOT NULL,
+    "courseId" INTEGER NOT NULL,
+    "teacherId" INTEGER NOT NULL,
+    "classId" INTEGER NOT NULL,
+    "accademicTermId" INTEGER NOT NULL,
+    "outOf" INTEGER NOT NULL,
+    "passMark" INTEGER,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "exams_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "scores" (
+    "id" SERIAL NOT NULL,
+    "score" DOUBLE PRECISION NOT NULL,
+    "examId" INTEGER NOT NULL,
+    "studentId" INTEGER NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "scores_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "parents_email_key" ON "parents"("email");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "teachers_email_key" ON "teachers"("email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Management_email_key" ON "Management"("email");
 
 -- AddForeignKey
 ALTER TABLE "students" ADD CONSTRAINT "students_classId_fkey" FOREIGN KEY ("classId") REFERENCES "classes"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -151,3 +210,21 @@ ALTER TABLE "course_classes" ADD CONSTRAINT "course_classes_classId_fkey" FOREIG
 
 -- AddForeignKey
 ALTER TABLE "fee_payments" ADD CONSTRAINT "fee_payments_studentId_fkey" FOREIGN KEY ("studentId") REFERENCES "students"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "exams" ADD CONSTRAINT "exams_courseId_fkey" FOREIGN KEY ("courseId") REFERENCES "courses"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "exams" ADD CONSTRAINT "exams_teacherId_fkey" FOREIGN KEY ("teacherId") REFERENCES "teachers"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "exams" ADD CONSTRAINT "exams_classId_fkey" FOREIGN KEY ("classId") REFERENCES "classes"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "exams" ADD CONSTRAINT "exams_accademicTermId_fkey" FOREIGN KEY ("accademicTermId") REFERENCES "academic_terms"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "scores" ADD CONSTRAINT "scores_examId_fkey" FOREIGN KEY ("examId") REFERENCES "exams"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "scores" ADD CONSTRAINT "scores_studentId_fkey" FOREIGN KEY ("studentId") REFERENCES "students"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

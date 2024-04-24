@@ -8,89 +8,97 @@ datasource db {
 }
 
 model Student {
-  id              Int              @id @default(autoincrement())
-  createdAt       DateTime         @default(now())
-  updatedAt       DateTime         @updatedAt
-  firstName       String
-  lastName        String
-  otherName       String?
-  gender          String
-  enrolledCourses StudentCourse[]
-  feePayments     FeePayment[]
-  results   Score[]
-  classId    Int
-  class      Class     @relation(fields: [classId], references: [id])
-  parentId    Int
-  parent      Parent     @relation(fields: [parentId], references: [id])
+  id                     Int             @id @default(autoincrement())
+  admisionNumber         Int             @default(autoincrement())
+  createdAt              DateTime        @default(now())
+  updatedAt              DateTime        @updatedAt
+  firstName              String
+  lastName               String
+  otherName              String?
+  feeBalance             Float?          @default(0)
+  emergencyContactNumber String
+  gender                 String
+  enrolledCourses        StudentCourse[]
+  feePayments            FeePayment[]
+  results                Score[]
+  classId                Int
+  class                  Class           @relation(fields: [classId], references: [id])
+  parentId               Int
+  parent                 Parent          @relation(fields: [parentId], references: [id])
 
   @@map("students")
 }
 
 model Parent {
-  id         Int       @id @default(autoincrement())
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
-  firstName  String
-  lastName   String
-  otherName  String?
-  gender     String
-  email      String    @unique
-  password   String
-  students   Student[]
+  id        Int       @id @default(autoincrement())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  firstName String
+  lastName  String
+  otherName String?
+  gender    String
+  email     String    @unique
+  password  String
+  students  Student[]
 
   @@map("parents")
 }
 
 model Teacher {
-  id         Int            @id @default(autoincrement())
-  createdAt  DateTime       @default(now())
-  updatedAt  DateTime       @updatedAt
-  email      String         @unique
-  password   String
-  firstName  String
-  lastName   String
-  otherName  String?
-  gender     String
-  courses    TeacherCourse[]
-  exam       Exam[]
-
+  id              Int             @id @default(autoincrement())
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+  email           String          @unique
+  password        String
+  firstName       String
+  lastName        String
+  otherName       String?
+  phone           String?
+  bankName        String?
+  accountNumber   String?
+  is_bom          Boolean
+  salaryAmount    Float?          @default(0)
+  salaryBalance   Float?          @default(0)
+  RemidialBalance Float?          @default(0)
+  TotalBance      Float?          @default(0)
+  gender          String
+  courses         TeacherCourse[]
+  exam            Exam[]
 
   @@map("teachers")
 }
 
 model Class {
-  id             Int            @id @default(autoincrement())
+  id             Int           @id @default(autoincrement())
   name           String
   classTeacher   String
   classPrefect   String
   pictureUrl     String?
-  createdAt      DateTime       @default(now())
-  updatedAt      DateTime       @updatedAt
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
   students       Student[]
-  academicTerm   AcademicTerm?  @relation(fields: [academicTermId], references: [id])
+  academicTerm   AcademicTerm? @relation(fields: [academicTermId], references: [id])
   academicTermId Int?
   courseClasses  CourseClass[]
-  exam       Exam[]
-
+  exam           Exam[]
 
   @@map("classes")
 }
 
 model Course {
-  id            Int             @id @default(autoincrement())
-  createdAt     DateTime        @default(now())
-  updatedAt     DateTime        @updatedAt
-  name          String
-  students      StudentCourse[]
-  teachers      TeacherCourse[]
-  classes       CourseClass[]
-  exam       Exam[]
+  id        Int             @id @default(autoincrement())
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+  name      String
+  students  StudentCourse[]
+  teachers  TeacherCourse[]
+  classes   CourseClass[]
+  exam      Exam[]
 
   @@map("courses")
 }
 
 model StudentCourse {
-
   student   Student @relation(fields: [studentId], references: [id])
   studentId Int
   course    Course  @relation(fields: [courseId], references: [id])
@@ -121,78 +129,77 @@ model CourseClass {
 }
 
 model AcademicTerm {
-  id        Int       @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   name      String
   startDate DateTime
   endDate   DateTime
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  feeAmount Float
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
   classes   Class[]
-  exam       Exam[]
-
+  exam      Exam[]
 
   @@map("academic_terms")
 }
 
 model FeePayment {
-  id              Int      @id @default(autoincrement())
-  amount          Float
-  paymentMode     String
+  id               Int      @id @default(autoincrement())
+  amount           Float
+  paymentMode      String
   confirmationCode String?
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-  studentId       Int
-  student         Student  @relation(fields: [studentId], references: [id])
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  studentId        Int
+  student          Student  @relation(fields: [studentId], references: [id])
 
   @@map("fee_payments")
 }
 
 model Management {
-  id         Int       @id @default(autoincrement())
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
-  firstName  String
-  lastName   String
-  otherName  String?
-  email      String    @unique
-  password   String
-  role       String   
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  firstName String
+  lastName  String
+  otherName String?
+  email     String   @unique
+  password  String
+  role      String
 }
 
 model Exam {
-  id        Int      @id @default(autoincrement())
-  name      String
-  date      DateTime
-  courseId  Int
-  teacherId Int
-  classId   Int
-  accademicTermId   Int
-  outOf     Int
-  passMark  Int?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id              Int      @id @default(autoincrement())
+  name            String
+  date            DateTime
+  courseId        Int
+  teacherId       Int
+  classId         Int
+  accademicTermId Int
+  outOf           Int
+  passMark        Int?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 
-  results   Score[]
+  results Score[]
 
-  course    Course   @relation(fields: [courseId], references: [id])
-  teacher   Teacher  @relation(fields: [teacherId], references: [id])
-  class     Class    @relation(fields: [classId], references: [id])
-  term     AcademicTerm    @relation(fields: [accademicTermId], references: [id])
+  course  Course       @relation(fields: [courseId], references: [id])
+  teacher Teacher      @relation(fields: [teacherId], references: [id])
+  class   Class        @relation(fields: [classId], references: [id])
+  term    AcademicTerm @relation(fields: [accademicTermId], references: [id])
 
   @@map("exams")
 }
 
 model Score {
   id        Int      @id @default(autoincrement())
-  score     Float    // Or whatever type you need
+  score     Float // Or whatever type you need
   examId    Int
   studentId Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  exam      Exam     @relation(fields: [examId], references: [id])
-  student   Student  @relation(fields: [studentId], references: [id])
+  exam    Exam    @relation(fields: [examId], references: [id])
+  student Student @relation(fields: [studentId], references: [id])
 
   @@map("scores")
 }
-

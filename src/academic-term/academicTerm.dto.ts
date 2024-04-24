@@ -1,12 +1,14 @@
-import { IsString, IsDateString } from 'class-validator';
+import { IsString, IsDateString, IsNumber } from 'class-validator';
 
 export class AcademicTermDto {
-    @IsString()
-    name: string;
+  @IsString()
+  name: string;
+  @IsNumber()
+  feeAmount: number;
 
-    @IsDateString()
-    startDate: Date;
+  @IsDateString()
+  startDate: Date;
 
-    @IsDateString()
-    endDate: Date;
+  @IsDateString()
+  endDate: Date;
 }

@@ -28,6 +28,14 @@ export class TeachersService {
         email: dto.email,
         password: hash,
         gender: dto.gender,
+        phone: dto.phone,
+        is_bom: dto.is_bom,
+        salaryAmount: dto.salaryAmount,
+        salaryBalance: dto.salaryBalance,
+        RemidialBalance: dto.RemidialBalance,
+        TotalBance: dto.TotalBance,
+        bankName: dto.bankName,
+        accountNumber: dto.accountNumber,
       },
     });
 
