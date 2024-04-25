@@ -1,22 +1,28 @@
-import { IsNumber, IsString, IsOptional, IsDateString } from 'class-validator';
+import {
+  IsNumber,
+  IsString,
+  IsOptional,
+  IsDateString,
+  IsBoolean,
+} from 'class-validator';
 
 export class FeePaymentDto {
-    @IsNumber()
-    amount: number;
+  @IsNumber()
+  amount: number;
 
-    @IsString()
-    paymentMode: string;
+  @IsString()
+  paymentMode: string;
 
-    @IsOptional()
-    @IsString()
-    confirmationCode?: string;
+  @IsOptional()
+  @IsString()
+  confirmationCode?: string;
 
-    @IsDateString()
-    createdAt: Date;
+  @IsDateString()
+  createdAt: Date;
 
-    @IsDateString()
-    updatedAt: Date;
+  @IsDateString()
+  updatedAt: Date;
 
-    @IsNumber()
-    studentId: number;
+  @IsNumber()
+  studentId: number;
 }

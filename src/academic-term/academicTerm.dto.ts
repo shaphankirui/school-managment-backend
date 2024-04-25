@@ -1,4 +1,4 @@
-import { IsString, IsDateString, IsNumber } from 'class-validator';
+import { IsString, IsDateString, IsNumber, IsBoolean } from 'class-validator';
 
 export class AcademicTermDto {
   @IsString()
@@ -11,4 +11,6 @@ export class AcademicTermDto {
 
   @IsDateString()
   endDate: Date;
+  @IsBoolean()
+  is_open: boolean;
 }

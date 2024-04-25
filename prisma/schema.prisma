@@ -8,23 +8,24 @@ datasource db {
 }
 
 model Student {
-  id                     Int             @id @default(autoincrement())
-  admisionNumber         Int             @default(autoincrement())
-  createdAt              DateTime        @default(now())
-  updatedAt              DateTime        @updatedAt
+  id                     Int                @id @default(autoincrement())
+  admisionNumber         Int                @default(autoincrement())
+  createdAt              DateTime           @default(now())
+  updatedAt              DateTime           @updatedAt
   firstName              String
   lastName               String
   otherName              String?
-  feeBalance             Float?          @default(0)
+  feeBalance             Float?             @default(0)
   emergencyContactNumber String
   gender                 String
   enrolledCourses        StudentCourse[]
   feePayments            FeePayment[]
   results                Score[]
+  feeBalanceEnd          FeeBalanceRecord[]
   classId                Int
-  class                  Class           @relation(fields: [classId], references: [id])
+  class                  Class              @relation(fields: [classId], references: [id])
   parentId               Int
-  parent                 Parent          @relation(fields: [parentId], references: [id])
+  parent                 Parent             @relation(fields: [parentId], references: [id])
 
   @@map("students")
 }
@@ -129,15 +130,17 @@ model CourseClass {
 }
 
 model AcademicTerm {
-  id        Int      @id @default(autoincrement())
-  name      String
-  startDate DateTime
-  endDate   DateTime
-  feeAmount Float
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  classes   Class[]
-  exam      Exam[]
+  id            Int                @id @default(autoincrement())
+  name          String
+  startDate     DateTime
+  endDate       DateTime
+  is_open       Boolean            @default(true)
+  feeAmount     Float
+  createdAt     DateTime           @default(now())
+  updatedAt     DateTime           @updatedAt
+  classes       Class[]
+  exam          Exam[]
+  feeBalanceEnd FeeBalanceRecord[]
 
   @@map("academic_terms")
 }
@@ -202,4 +205,15 @@ model Score {
   student Student @relation(fields: [studentId], references: [id])
 
   @@map("scores")
+}
+
+model FeeBalanceRecord {
+  id         Int      @id @default(autoincrement())
+  studentId  Int
+  student    Student  @relation(fields: [studentId], references: [id])
+  feeBalance Float
+  recordedAt DateTime @default(now())
+
+  academicTerm   AcademicTerm @relation(fields: [academicTermId], references: [id])
+  academicTermId Int
 }
