@@ -5,7 +5,7 @@ export class StudentDto {
   @IsNotEmpty()
   firstName: string;
   @IsNumber()
-  @IsNotEmpty()
+  @IsOptional()
   admisionNumber: number;
   @IsString()
   @IsNotEmpty()
