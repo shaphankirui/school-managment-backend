@@ -55,6 +55,26 @@ export class StudentService {
     });
   }
 
+  async getStudentsWithPositiveFeeBalance() {
+    return this.prisma.student.findMany({
+      where: {
+        feeBalance: {
+          gt: 0, // Filter students with fee balance greater than 0
+        },
+      },
+    });
+  }
+
+  async getStudentsWithNonPositiveFeeBalance() {
+    return this.prisma.student.findMany({
+      where: {
+        feeBalance: {
+          lte: 0, // Filter students with fee balance less than or equal to 0
+        },
+      },
+    });
+  }
+
   async deleteStudent(id: number) {
     const existingStudent = await this.prisma.student.findUnique({
       where: { id },

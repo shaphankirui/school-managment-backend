@@ -4,6 +4,7 @@ import {
   IsEmail,
   IsBoolean,
   IsNumber,
+  IsOptional,
 } from 'class-validator';
 
 export class TeacherDto {
@@ -27,22 +28,22 @@ export class TeacherDto {
   @IsNotEmpty()
   @IsBoolean()
   is_bom: boolean;
-  @IsNotEmpty()
+  @IsOptional()
   @IsNumber()
   salaryAmount: number;
-  @IsNotEmpty()
+  @IsOptional()
   @IsNumber()
   salaryBalance: number;
-  @IsNotEmpty()
+  @IsOptional()
   @IsNumber()
   RemidialBalance: number;
-  @IsNotEmpty()
+  @IsOptional()
   @IsNumber()
   TotalBance: number;
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   bankName: string;
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   accountNumber: string;
 
