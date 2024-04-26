@@ -18,9 +18,11 @@ export class FeePaymentDto {
   confirmationCode?: string;
 
   @IsDateString()
+  @IsOptional()
   createdAt: Date;
 
   @IsDateString()
+  @IsOptional()
   updatedAt: Date;
 
   @IsNumber()
