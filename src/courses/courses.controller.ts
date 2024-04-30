@@ -1,4 +1,12 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+} from '@nestjs/common';
 import { CourseDto } from './courses.dto';
 import { CoursesService } from './courses.service';
 
@@ -29,5 +37,17 @@ export class CoursesController {
   @Delete(':id')
   async deleteCourse(@Param('id') id: string) {
     return this.courseService.deleteCourse(parseInt(id, 10));
+  }
+
+  // New endpoint to handle grading systems
+  @Post(':id/grading-system')
+  async createGradingSystem(
+    @Param('id') id: string,
+    @Body() gradingSystem: any,
+  ) {
+    return this.courseService.createGradingSystem(
+      parseInt(id, 10),
+      gradingSystem,
+    );
   }
 }
