@@ -14,7 +14,7 @@ export class StudentService {
         otherName: dto.otherName,
         gender: dto.gender,
         classId: dto.classId,
-        feeBalance: dto.classId,
+        subClassId: dto.subClassId,
         emergencyContactNumber: dto.emergencyContactNumber,
         parentId: dto.parentId, // Corrected field
       },

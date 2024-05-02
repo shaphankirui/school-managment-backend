@@ -24,6 +24,8 @@ model Student {
   feeBalanceEnd          FeeBalanceRecord[]
   classId                Int
   class                  Class              @relation(fields: [classId], references: [id])
+  subClassId             Int
+  subClass               SubClass           @relation(fields: [subClassId], references: [id])
   parentId               Int
   parent                 Parent             @relation(fields: [parentId], references: [id])
 
@@ -72,8 +74,8 @@ model Teacher {
 model Class {
   id             Int           @id @default(autoincrement())
   name           String
-  classTeacher   String
-  classPrefect   String
+  classTeacher   String?
+  classPrefect   String?
   pictureUrl     String?
   createdAt      DateTime      @default(now())
   updatedAt      DateTime      @updatedAt
@@ -84,6 +86,24 @@ model Class {
   exam           Exam[]
 
   @@map("classes")
+}
+
+model SubClass {
+  id             Int           @id @default(autoincrement())
+  name           String
+  classTeacher   Int
+  classPrefect   Int
+  classId        Int
+  pictureUrl     String?
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  students       Student[]
+  academicTerm   AcademicTerm? @relation(fields: [academicTermId], references: [id])
+  academicTermId Int?
+  courseClasses  CourseClass[]
+  exam           Exam[]
+
+  @@map("subClasses")
 }
 
 model Course {
@@ -100,31 +120,55 @@ model Course {
   @@map("courses")
 }
 
+model ClassCourse {
+  id            Int             @id @default(autoincrement())
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  name          String
+  classId       Int
+  courseId      Int
+  students      StudentCourse[]
+  teachers      TeacherCourse[]
+  classes       CourseClass[]
+  exam          Exam[]
+  GradingSystem GradingSystem[]
+
+  @@map("classCourses")
+}
+
 model StudentCourse {
-  student   Student @relation(fields: [studentId], references: [id])
-  studentId Int
-  course    Course  @relation(fields: [courseId], references: [id])
-  courseId  Int
+  student       Student      @relation(fields: [studentId], references: [id])
+  studentId     Int
+  course        Course       @relation(fields: [courseId], references: [id])
+  courseId      Int
+  ClassCourse   ClassCourse? @relation(fields: [classCourseId], references: [id])
+  classCourseId Int?
 
   @@id([studentId, courseId])
   @@map("student_courses")
 }
 
 model TeacherCourse {
-  teacher   Teacher @relation(fields: [teacherId], references: [id])
-  teacherId Int
-  course    Course  @relation(fields: [courseId], references: [id])
-  courseId  Int
+  teacher       Teacher      @relation(fields: [teacherId], references: [id])
+  teacherId     Int
+  course        Course       @relation(fields: [courseId], references: [id])
+  courseId      Int
+  ClassCourse   ClassCourse? @relation(fields: [classCourseId], references: [id])
+  classCourseId Int?
 
   @@id([teacherId, courseId])
   @@map("teacher_courses")
 }
 
 model CourseClass {
-  course   Course @relation(fields: [courseId], references: [id])
-  courseId Int
-  class    Class  @relation(fields: [classId], references: [id])
-  classId  Int
+  course        Course       @relation(fields: [courseId], references: [id])
+  courseId      Int
+  class         Class        @relation(fields: [classId], references: [id])
+  classId       Int
+  SubClass      SubClass?    @relation(fields: [subClassId], references: [id])
+  subClassId    Int?
+  ClassCourse   ClassCourse? @relation(fields: [classCourseId], references: [id])
+  classCourseId Int?
 
   @@id([courseId, classId])
   @@map("course_classes")
@@ -142,6 +186,7 @@ model AcademicTerm {
   classes       Class[]
   exam          Exam[]
   feeBalanceEnd FeeBalanceRecord[]
+  SubClass      SubClass[]
 
   @@map("academic_terms")
 }
@@ -186,10 +231,14 @@ model Exam {
 
   results Score[]
 
-  course  Course       @relation(fields: [courseId], references: [id])
-  teacher Teacher      @relation(fields: [teacherId], references: [id])
-  class   Class        @relation(fields: [classId], references: [id])
-  term    AcademicTerm @relation(fields: [accademicTermId], references: [id])
+  course        Course       @relation(fields: [courseId], references: [id])
+  teacher       Teacher      @relation(fields: [teacherId], references: [id])
+  class         Class        @relation(fields: [classId], references: [id])
+  term          AcademicTerm @relation(fields: [accademicTermId], references: [id])
+  SubClass      SubClass?    @relation(fields: [subClassId], references: [id])
+  subClassId    Int?
+  ClassCourse   ClassCourse? @relation(fields: [classCourseId], references: [id])
+  classCourseId Int?
 
   @@map("exams")
 }
@@ -220,10 +269,12 @@ model FeeBalanceRecord {
 }
 
 model GradingSystem {
-  id          Int      @id @default(autoincrement())
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  course      Course   @relation(fields: [courseId], references: [id])
-  courseId    Int
-  gradeRanges Json // Define the structure to store grade ranges and points
+  id            Int          @id @default(autoincrement())
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+  course        Course       @relation(fields: [courseId], references: [id])
+  courseId      Int
+  gradeRanges   Json // Define the structure to store grade ranges and points
+  ClassCourse   ClassCourse? @relation(fields: [classCourseId], references: [id])
+  classCourseId Int?
 }

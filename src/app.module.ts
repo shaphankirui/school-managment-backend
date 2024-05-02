@@ -16,6 +16,8 @@ import { FeePaymentModule } from './fee-payment/fee-payment.module';
 import { ManagmentModule } from './managment/managment.module';
 import { ExamModule } from './exam/exam.module';
 import { ResultsModule } from './results/results.module';
+import { ClassCoursesModule } from './class-courses/class-courses.module';
+import { SubClassesModule } from './sub-classes/sub-classes.module';
 
 @Module({
   imports: [
@@ -48,6 +50,10 @@ import { ResultsModule } from './results/results.module';
     ExamModule,
 
     ResultsModule,
+
+    ClassCoursesModule,
+
+    SubClassesModule,
   ],
   controllers: [],
   providers: [],

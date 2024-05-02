@@ -1,25 +1,24 @@
-// CoursesService
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { ClassCourseDto } from './classCourses.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { CourseDto } from './courses.dto';
 
 @Injectable()
-export class CoursesService {
+export class ClassCoursesService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async createCourse(dto: CourseDto) {
-    const course = await this.prisma.course.create({ data: dto });
+  async createCourse(dto: ClassCourseDto) {
+    const course = await this.prisma.classCourse.create({ data: dto });
     return course;
   }
 
   async getAllCourses() {
-    return this.prisma.course.findMany({
+    return this.prisma.classCourse.findMany({
       include: { GradingSystem: true },
     });
   }
 
   async getCourseById(id: number) {
-    const course = await this.prisma.course.findUnique({
+    const course = await this.prisma.classCourse.findUnique({
       where: { id },
       include: { GradingSystem: true }, // Include the associated grading system
     });
@@ -29,28 +28,28 @@ export class CoursesService {
     return course;
   }
 
-  async updateCourse(id: number, dto: CourseDto) {
-    const existingCourse = await this.prisma.course.findUnique({
+  async updateCourse(id: number, dto: ClassCourseDto) {
+    const existingCourse = await this.prisma.classCourse.findUnique({
       where: { id },
     });
     if (!existingCourse) {
       throw new NotFoundException(`Course with ID ${id} not found`);
     }
-    return this.prisma.course.update({ where: { id }, data: dto });
+    return this.prisma.classCourse.update({ where: { id }, data: dto });
   }
 
   async deleteCourse(id: number) {
-    const existingCourse = await this.prisma.course.findUnique({
+    const existingCourse = await this.prisma.classCourse.findUnique({
       where: { id },
     });
     if (!existingCourse) {
       throw new NotFoundException(`Course with ID ${id} not found`);
     }
-    return this.prisma.course.delete({ where: { id } });
+    return this.prisma.classCourse.delete({ where: { id } });
   }
 
   async createGradingSystem(courseId: number, gradingSystem: any) {
-    const course = await this.prisma.course.findUnique({
+    const course = await this.prisma.classCourse.findUnique({
       where: { id: courseId },
       include: { GradingSystem: true },
     });

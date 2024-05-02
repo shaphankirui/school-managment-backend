@@ -18,11 +18,10 @@ export class ResultsService {
       },
     });
   }
-  
+
   async getAllResults() {
     return this.prisma.score.findMany();
   }
-
   async getResultById(id: number) {
     const result = await this.prisma.score.findUnique({ where: { id } });
     if (!result) {
@@ -63,5 +62,8 @@ export class ResultsService {
       },
     });
   }
-}
 
+  async calculatePercentage(score: number, outOf: number): Promise<number> {
+    return (score / outOf) * 100;
+  }
+}
