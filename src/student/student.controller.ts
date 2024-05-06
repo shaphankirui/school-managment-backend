@@ -9,7 +9,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { JwtGuard } from 'src/auth/guard';
-import { StudentDto } from './student.dto';
+import { AssignCourseDto, StudentDto } from './student.dto';
 import { StudentService } from './student.service';
 
 @Controller('student')
@@ -29,6 +29,10 @@ export class StudentController {
   @Post()
   async createStudent(@Body() dto: StudentDto) {
     return this.studentService.createStudent(dto);
+  }
+  @Post('assign-course')
+  async assignCourseToStudent(@Body() assignCourseDto: AssignCourseDto) {
+    return this.studentService.assignCourseToStudent(assignCourseDto);
   }
 
   @Get()

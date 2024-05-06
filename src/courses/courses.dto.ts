@@ -4,6 +4,9 @@ export class CourseDto {
   @IsString()
   @IsNotEmpty()
   name: string;
+  @IsString()
+  @IsOptional()
+  category: string;
 
 //   @IsString()
 //   @IsOptional()

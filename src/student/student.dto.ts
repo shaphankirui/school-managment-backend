@@ -30,3 +30,11 @@ export class StudentDto {
   @IsNotEmpty()
   parentId: number;
 }
+export class AssignCourseDto {
+  @IsNumber()
+  @IsNotEmpty()
+  studentId: number;
+
+  @IsNotEmpty()
+  classCourseAssignments: { classCourseId: number }[];
+}

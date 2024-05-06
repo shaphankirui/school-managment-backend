@@ -111,6 +111,7 @@ model Course {
   createdAt     DateTime        @default(now())
   updatedAt     DateTime        @updatedAt
   name          String
+  category      String          @default("Others")
   students      StudentCourse[]
   teachers      TeacherCourse[]
   classes       CourseClass[]
