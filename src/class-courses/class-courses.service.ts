@@ -1,6 +1,11 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { ClassCourseDto } from './classCourses.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class ClassCoursesService {
@@ -76,5 +81,69 @@ export class ClassCoursesService {
     }
 
     return gradingSystemData;
+  }
+
+  async linkStudentsToClassCourse(classId: string, courseId: string) {
+    const parsedClassId = parseInt(classId, 10);
+    const parsedCourseId = parseInt(courseId, 10);
+
+    if (isNaN(parsedClassId) || isNaN(parsedCourseId)) {
+      throw new BadRequestException('Invalid class or course ID');
+    }
+
+    const classWithStudents = await this.prisma.class.findUnique({
+      where: { id: parsedClassId },
+      include: {
+        students: true,
+        courseClasses: {
+          where: {
+            courseId: parsedCourseId,
+          },
+          include: {
+            ClassCourse: true,
+          },
+        },
+      },
+    });
+    console.log('classWithStudents:', classWithStudents);
+
+    if (!classWithStudents) {
+      throw new NotFoundException(`Class with ID ${classId} not found`);
+    }
+
+    const promises = classWithStudents.students.map(async (student) => {
+      const classCourse = classWithStudents.courseClasses.find((cc) => {
+        return (
+          cc.classId === parsedClassId ||
+          (cc.subClassId && student.subClassId === cc.subClassId)
+        );
+      })?.ClassCourse;
+
+      if (classCourse) {
+        const existingRecord = await this.prisma.studentCourse.findUnique({
+          where: {
+            studentId_courseId: {
+              studentId: student.id,
+              courseId: parsedCourseId,
+            },
+          },
+        });
+
+        if (!existingRecord) {
+          const createdStudentCourse = await this.prisma.studentCourse.create({
+            data: {
+              studentId: student.id,
+              courseId: parsedCourseId,
+              classCourseId: classCourse.id,
+            },
+          });
+          console.log('Created StudentCourse:', createdStudentCourse);
+        }
+      }
+    });
+
+    await Promise.all(promises);
+
+    return { message: 'Students linked to the class course successfully' };
   }
 }

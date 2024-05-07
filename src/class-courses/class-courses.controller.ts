@@ -50,4 +50,11 @@ export class ClassCoursesController {
       gradingSystem,
     );
   }
+  @Post(':classId/link-students/:courseId')
+  async linkStudentsToClassCourse(
+    @Param('classId') classId: string,
+    @Param('courseId') courseId: string,
+  ) {
+    return this.courseService.linkStudentsToClassCourse(classId, courseId);
+  }
 }
