@@ -99,12 +99,10 @@ export class ClassCoursesService {
           where: {
             courseId: parsedCourseId,
           },
-          include: {
-            ClassCourse: true,
-          },
         },
       },
     });
+
     console.log('classWithStudents:', classWithStudents);
 
     if (!classWithStudents) {
@@ -112,12 +110,11 @@ export class ClassCoursesService {
     }
 
     const promises = classWithStudents.students.map(async (student) => {
-      const classCourse = classWithStudents.courseClasses.find((cc) => {
-        return (
+      const classCourse = classWithStudents.courseClasses.find(
+        (cc) =>
           cc.classId === parsedClassId ||
-          (cc.subClassId && student.subClassId === cc.subClassId)
-        );
-      })?.ClassCourse;
+          (cc.subClassId && student.subClassId === cc.subClassId),
+      );
 
       if (classCourse) {
         const existingRecord = await this.prisma.studentCourse.findUnique({
